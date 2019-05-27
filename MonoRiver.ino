@@ -73,6 +73,9 @@ byte NESLatch = 5; //tambien conocido como estrobo
 byte NESClock = 4;
 byte NESButtonData; 
 
+/*Tiempo*/
+int periodo = 300;
+unsigned long TiempoAhora = 0;
 /*
    Set up UART SPI master mode and timers for sync pulses
 */
@@ -145,6 +148,7 @@ void blank_line(void)
     OCR1A = _CYCLES_VSYNC;
     scanline = 0;
   }
+
 }
 //
 // Active scanlines
@@ -403,32 +407,32 @@ void GetNESControllerData(){                               // this is where it a
 /*
    Run main loop
 */
-byte xTab = 2;
-byte yTab = 4;
-signed char  xMove = 1;
-signed char yMove = -1;
-byte xLine = 42;
-byte yLine = 47;
+
 char *cadena="";
 void loop(void)
 {
   byte i;
 
-  
+    
 
   if (vblank) // only update every frame
   {
-     
-     GetNESControllerData();         // This calls the function to grab the NES control pad data and it will store it in 'NESButtonData'
-      cadena="";
+    
+
+        cadena="";
+        sprintf(cadena, "\n %d", NESButtonData);
+        printstr(cadena);
+        GetNESControllerData();
+        delay(500);    
+       
+      /*cadena="";
       printstr("\n");
       sprintf(cadena, "%i", NESButtonData);
       printstr(cadena);
       printstr("\n");
-      cadena="";
+      cadena="";*/
     
   
-    
     vblank = 0;
   }
 }
